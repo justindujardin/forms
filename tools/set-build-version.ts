@@ -12,7 +12,7 @@ function getBuildVersion() {
       // Core options
       dryRun: true,
       branch: 'master',
-      repositoryUrl: 'https://github.com/justindujardin/mort_jams.git'
+      repositoryUrl: 'https://github.com/justindujardin/forms.git'
     },
     {
       cwd: './',
