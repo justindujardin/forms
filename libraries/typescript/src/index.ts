@@ -31,14 +31,14 @@ export interface ScaleFieldBaseProps<UISchemaType = ScaleUIFieldSchema> {
   hidden?: boolean
   label?: string
   value?: string
-  help?: string | React.ReactNode
+  help?: string | any
   placeholder?: string
   readonly?: boolean
   formData?: any
   required?: boolean
   rawErrors?: any[]
   rawHelp?: string
-  children?: React.ReactNode
+  children?: any
   registry?: any
   schema?: any
   errorSchema?: any
@@ -95,7 +95,7 @@ export interface ScaleUIFieldSchema {
   readonly prefix?: string
   readonly suffix?: string
   readonly hidden?: boolean
-  readonly icon?: ScaleIcons
+  readonly icon?: string
   readonly minimumRows?: number
   readonly field?: string
   readonly data?: string
