@@ -7,7 +7,7 @@
   ],
   "main": "dist/mort_jams.umd.js",
   "module": "dist/mort_jams.es5.js",
-  "typings": "dist/types/index.d.ts",
+  "typings": "dist/types/src/index.d.ts",
   "files": [
     "dist"
   ],
