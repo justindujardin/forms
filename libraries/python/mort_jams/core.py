@@ -6,7 +6,7 @@ import srsly
 from pydantic import BaseModel, Schema, fields
 
 
-class UILabelValuePair(BaseModel):
+class UIValuePair(BaseModel):
     value: str
     label: str
     meta: Optional[str]
@@ -26,7 +26,7 @@ class UIFormattedString(BaseModel):
 #   - [10,4,3,12]
 #   - [{value:12, label: "Administrator"}]
 #   - ["cool","other","third"]
-UISelectOptions = Union[UILabelValuePair, str, bool, int, float]
+UISelectOptions = Union[UIValuePair, str, bool, int, float]
 
 
 class UISchemaStep(BaseModel):
@@ -68,18 +68,18 @@ class UIProp(BaseModel):
 
     title: Optional[str]
     description: Optional[Union[str, Dict[str, str]]]
-    help: Optional[str]
+    help: Optional[Union[str, UIFormattedString, Dict[str, str]]]
     widget: Optional[str]
     field: Optional[str]
     data: Optional[str]
     placeholder: Optional[str]
     autoFocus: Optional[bool]
+    minimumRows: Optional[int]
     text: Optional[str]
     classes: Optional[str]
     disabled: Optional[Union[bool, str]]
     readonly: Optional[bool]
     icon: Optional[str]
-    items: Optional[List[UISelectOptions]]
     step: Optional[int]
     messages: Optional[Dict[str, Union[UIFormattedString, str]]]
     conditions: Optional[List[UICondition]]
