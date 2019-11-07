@@ -125,7 +125,7 @@ class FormModel(BaseModel):
          - ui contains the associated UI schema for the same model"""
         return FormSchema(
             data=cls.schema(by_alias=by_alias), ui=model_ui_schema(cls)
-        ).dict()
+        ).dict(skip_defaults=True)
 
 
 def model_ui_schema(model: Type[FormModel]) -> Dict[str, object]:
