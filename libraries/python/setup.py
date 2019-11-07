@@ -21,6 +21,7 @@ setup(
     version=VERSION,
     description="cats and stuff",
     long_description=readme(),
+    long_description_content_type="text/markdown",
     keywords="forms",
     url="https://github.com/justindujardin/mort_jams",
     author="Justin DuJardin",
