@@ -93,14 +93,14 @@ class UISchema(BaseModel):
     properties: Optional[Dict[str, UIProp]]
 
 
-class ScaleProp(Schema):
+class FormProp(Schema):
     """Specify a property mapping between a recipe argument and prodigy's UI"""
 
     def __init__(
         self, default: Any, *, ui: Optional[UIProp] = None, **kwargs: Any,
     ) -> None:
         self.ui = ui
-        super(ScaleProp, self).__init__(default, **kwargs)
+        super(FormProp, self).__init__(default, **kwargs)
 
 
 class FormSchema(BaseModel):
@@ -108,8 +108,8 @@ class FormSchema(BaseModel):
     ui: UISchema
 
 
-class ScaleSchemaModel(BaseModel):
-    """Base Prodigy Scale pydantic model. It supports frontend UI schema attributes
+class FormModel(BaseModel):
+    """Base JSON+UI pydantic model. It supports frontend UI schema attributes
     and overrides the schema() method to output an object with both the JSONSchema
     and the UI attributes that inform how it should be rendered in the frontend."""
 
@@ -128,7 +128,7 @@ class ScaleSchemaModel(BaseModel):
         ).dict()
 
 
-def model_ui_schema(model: Type[ScaleSchemaModel]) -> Dict[str, object]:
+def model_ui_schema(model: Type[FormModel]) -> Dict[str, object]:
     """Take a single ``model`` and generate the uiSchema for its type."""
     config: object = {}
     if hasattr(model.Config, "ui") and isinstance(model.Config.ui, UISchemaConfig):
@@ -138,8 +138,8 @@ def model_ui_schema(model: Type[ScaleSchemaModel]) -> Dict[str, object]:
     definitions: Dict[str, Any] = {}
     for k, f in model.__fields__.items():
         field: fields.Field = f
-        if isinstance(field.schema, ScaleProp):
-            schema = cast(ScaleProp, field.schema)
+        if isinstance(field.schema, FormProp):
+            schema = cast(FormProp, field.schema)
             if schema.ui is not None:
                 name = field.name
                 properties[name] = {}
