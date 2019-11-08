@@ -94,8 +94,6 @@ class UISchema(BaseModel):
 
 
 class FormProp(Schema):
-    """Specify a property mapping between a recipe argument and prodigy's UI"""
-
     def __init__(
         self, default: Any, *, ui: Optional[UIProp] = None, **kwargs: Any,
     ) -> None:

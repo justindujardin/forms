@@ -1,10 +1,10 @@
-export interface ScaleJSONUISchema {
-  schema: ScaleJSONSchema
-  ui: ScaleUISchema
+export interface JSONUISchema {
+  schema: JSONSchema
+  ui: UISchema
 }
 
 /** Dictionary of data names to enumerated values */
-export interface ScaleJSONUIContext {
+export interface JSONUIContext {
   [dataKey: string]:
     | SelectValuePair[]
     | string
@@ -16,7 +16,7 @@ export interface ScaleJSONUIContext {
 }
 
 /** Common interface for base field properties */
-export interface ScaleFieldBaseProps<UISchemaType = ScaleUIFieldSchema> {
+export interface FieldBaseProps<UISchemaType = UIFieldSchema> {
   /** onChange must be passed to all fields so they have a way of communicating change to the form */
   onChange: (newValue, errorSchema?) => void
   /** name element assigned to this fields DOM element */
@@ -59,7 +59,7 @@ export interface SelectValuePair<T = string> {
   meta?: string
 }
 
-export type ScaleUIEnumeratedTypes = SelectValuePair | string | boolean | number
+export type UIEnumeratedTypes = SelectValuePair | string | boolean | number
 
 /** Interface for sources from Broker */
 export interface Source extends SelectValuePair<string> {
@@ -74,7 +74,7 @@ export interface UISchemaStep {
 }
 
 /** the `options` key for field-specific data */
-export interface ScaleUIFieldSchemaOptions {}
+export interface UIFieldSchemaOptions {}
 
 /**
  * A condition set to use in determining if a field should be shown.
@@ -82,12 +82,12 @@ export interface ScaleUIFieldSchemaOptions {}
  * Accepts any string key that maps to a schema property and then a supported
  * value type
  */
-export interface ScaleUIFieldConditionSet {
+export interface UIFieldConditionSet {
   readonly [schemaPropKey: string]: boolean | string | string[]
 }
 
 /** UI configuration for a single schema field */
-export interface ScaleUIFieldSchema {
+export interface UIFieldSchema {
   readonly autoFocus?: boolean
   readonly label?: boolean
   readonly small?: boolean
@@ -116,7 +116,7 @@ export interface ScaleUIFieldSchema {
    *   - [{value:12, label: "Administrator"}]
    *   - ["cool","other","third"]
    */
-  readonly uiSelectOptions?: ScaleUIEnumeratedTypes[]
+  readonly uiSelectOptions?: UIEnumeratedTypes[]
   readonly description?: string | { [key: string]: string }
   // TODO: use keyof valueof trick to get a string enumeration of all widget types
   //       from the mappings lookup.
@@ -127,7 +127,7 @@ export interface ScaleUIFieldSchema {
   /** Field Ordering is applied to certain types like arrays and objects */
   readonly order?: string[]
   /** Condition set for determining when to show this field */
-  readonly conditions?: ScaleUIFieldConditionSet | ScaleUIFieldConditionSet[]
+  readonly conditions?: UIFieldConditionSet | UIFieldConditionSet[]
   /**
    * A dictionary mapping of string for specific error messages.
    * For example:
@@ -142,7 +142,7 @@ export interface ScaleUIFieldSchema {
 /**
  * JSON Schema placeholder type.
  */
-export interface ScaleJSONSchema {
+export interface JSONSchema {
   // TODO: better JSONSchema types
   [name: string]: any
 }
@@ -150,9 +150,9 @@ export interface ScaleJSONSchema {
  * Base UI Schema that combines with a JSONSchema object to describe how to build
  * a dynamic form. Extend this interface for created UI schemas to get strong typing.
  */
-export interface ScaleUISchema {
+export interface UISchema {
   readonly config?: UISchemaConfig
-  readonly properties: { [name: string]: ScaleUIFieldSchema }
+  readonly properties: { [name: string]: UIFieldSchema }
 }
 
 export interface UISchemaConfig {
