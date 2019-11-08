@@ -30,7 +30,7 @@
   "lint-staged": {
     "libraries/python/mort_jams/**/*.py": [
       "libraries/python/.env/bin/python libraries/python/write_types.py",
-      "git add libraries/typescript/src/types.d.ts"
+      "git add libraries/typescript/src/types.ts"
     ],
     "libraries/typescript/{src,test}/**/*.ts": [
       "cd libraries/typescript",
@@ -43,6 +43,7 @@
   },
   "peerDependencies": {},
   "scripts": {
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "write_types": "ts-node tools/write-types.ts"
   }
 }

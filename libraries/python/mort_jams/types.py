@@ -29,12 +29,19 @@ class UIFormattedString(BaseModel):
 UISelectOptions = Union[UIValuePair, str, bool, int, float]
 
 
-class UISchemaStep(BaseModel):
+class StrictModel(BaseModel):
+    class Config:
+        extra = "forbid"
+
+
+class UISchemaStep(StrictModel):
+    """Text data to display for a single step in a form with multiple steps"""
+
     label: str
     description: Optional[str]
 
 
-class UISchemaConfig(BaseModel):
+class UISchemaConfig(StrictModel):
     translate: Optional[bool] = Schema(  # type: ignore
         True,
         description="whether or not the labels should be interpreted as locale keys",
@@ -63,13 +70,8 @@ class UICondition(BaseModel):
         extra = "allow"
 
 
-class UIProp(BaseModel):
+class UIProp(StrictModel):
     """Define UI attributes for the current FormProp"""
-
-    class Config:
-        """Do not allow extra properties. This throws errors about field name typos"""
-
-        extra = "forbid"
 
     title: Optional[str]
     description: Optional[Union[str, Dict[str, str]]]
@@ -152,12 +154,7 @@ def model_ui_schema(model: Type[FormModel]) -> Dict[str, object]:
             schema = cast(FormProp, field.schema)
             if schema.ui is not None:
                 name = field.name
-                properties[name] = {}
-                ui_properties = schema.ui.dict(skip_defaults=True)
-                for key in ui_properties.keys():
-                    value = ui_properties[key]
-                    key = key
-                    properties[name][key] = value
+                properties[name] = schema.ui.dict(skip_defaults=True)
 
     out_schema = dict(config=config, properties=properties)
     return out_schema

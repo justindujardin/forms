@@ -17,10 +17,21 @@ print(f" - {json_file}")
 srsly.write_json(json_file, json)
 
 
-output_file = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../typescript/src/types.ts")
-)
-call(["npx", "json2ts", json_file, output_file])
+file_dir = os.path.dirname(__file__)
+# Set CWD to the root
+os.chdir(os.path.join(file_dir, "../../"))
+prettier_rc = os.path.abspath(".prettierrc")
+output_file = os.path.abspath("libraries/typescript/src/types.ts")
+
+args = [
+    "npm",
+    "run",
+    "write_types",
+    json_file,
+    output_file,
+    prettier_rc,
+]
+call(args)
 
 shutil.rmtree(temp_dir)
 print(f"Done, output: {output_file}")

@@ -22,16 +22,16 @@ export type Translate = boolean
 export type Order = string[]
 export type Title1 = string
 export type Description1 =
-  | string
-  | {
-      [k: string]: string
-    }
+    | string
+    | {
+          [k: string]: string
+      }
 export type Help =
-  | string
-  | UIFormattedString
-  | {
-      [k: string]: string
-    }
+    | string
+    | UIFormattedString
+    | {
+          [k: string]: string
+      }
 export type Key = string
 export type Widget = string
 export type Field = string
@@ -52,82 +52,85 @@ export type Conditions = UICondition[]
  * Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`
  */
 export interface FormSchema {
-  data: Data
-  ui: UISchema
-  [k: string]: any
+    data: Data
+    ui: UISchema
+    [k: string]: any
 }
 export interface Data {
-  [k: string]: any
+    [k: string]: any
 }
 /**
  * UISchema object that is associated with a JSONSchema. Contains form
  * configuration information, and a dictionary of properties.
  */
 export interface UISchema {
-  config?: UISchemaConfig
-  properties?: Properties
-  [k: string]: any
+    config?: UISchemaConfig
+    properties?: Properties
+    [k: string]: any
 }
 export interface UISchemaConfig {
-  title?: Title
-  disabled?: Disabled
-  readonly?: Readonly
-  narrow?: Narrow
-  steps?: Steps
-  translate?: Translate
-  order?: Order
-  [k: string]: any
+    title?: Title
+    disabled?: Disabled
+    readonly?: Readonly
+    narrow?: Narrow
+    steps?: Steps
+    translate?: Translate
+    order?: Order
+    [k: string]: any
 }
+/**
+ * Text data to display for a single step in a form with multiple steps
+ */
 export interface UISchemaStep {
-  label: Label
-  description?: Description
-  [k: string]: any
+    label: Label
+    description?: Description
+    [k: string]: any
 }
 export interface Properties {
-  [k: string]: UIProp
+    [k: string]: UIProp
 }
 /**
  * Define UI attributes for the current FormProp
  */
 export interface UIProp {
-  title?: Title1
-  description?: Description1
-  help?: Help
-  widget?: Widget
-  field?: Field
-  data?: Data1
-  placeholder?: Placeholder
-  autoFocus?: Autofocus
-  minimumRows?: Minimumrows
-  text?: Text
-  classes?: Classes
-  disabled?: Disabled1
-  readonly?: Readonly1
-  icon?: Icon
-  step?: Step
-  messages?: Messages
-  conditions?: Conditions
-  [k: string]: any
+    title?: Title1
+    description?: Description1
+    help?: Help
+    widget?: Widget
+    field?: Field
+    data?: Data1
+    placeholder?: Placeholder
+    autoFocus?: Autofocus
+    minimumRows?: Minimumrows
+    text?: Text
+    classes?: Classes
+    disabled?: Disabled1
+    readonly?: Readonly1
+    icon?: Icon
+    step?: Step
+    messages?: Messages
+    conditions?: Conditions
+    [k: string]: any
 }
 /**
  * Useful when you want to specify a translation entry with format arguments
  */
 export interface UIFormattedString {
-  key: Key
-  args: Args
-  [k: string]: any
+    key: Key
+    args: Args
+    [k: string]: any
 }
 export interface Args {
-  [k: string]: number | string
+    [k: string]: number | string
 }
 export interface Messages {
-  [k: string]: UIFormattedString | string
+    [k: string]: UIFormattedString | string
 }
 /**
  * Determine if a field should be shown based some combination of other
  * fields in the Schema.
  */
 export interface UICondition {
-  type?: Type
-  [k: string]: any
+    type?: Type
+    [k: string]: any
 }
