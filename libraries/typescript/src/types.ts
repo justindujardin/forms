@@ -71,7 +71,7 @@ export interface FormSchema {
  */
 export interface UISchema {
   config: UISchemaConfig
-  properties?: UISchemaProps
+  properties: UISchemaProps
   [k: string]: any
 }
 /**

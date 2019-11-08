@@ -111,7 +111,7 @@ class UISchema(BaseModel):
 
     config: UISchemaConfig
     properties: Dict[str, UIProp] = Schema(
-        {},
+        ...,
         title="UISchemaProps",
         description=(
             "Dictionary of key/value where the key is a property name,"
