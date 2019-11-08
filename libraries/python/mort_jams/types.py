@@ -90,6 +90,7 @@ class UIProp(StrictModel):
     step: Optional[int]
     messages: Optional[Dict[str, Union[UIFormattedString, str]]]
     conditions: Optional[List[UICondition]]
+    options: Optional[UISelectOptions]
 
 
 UIHidden = UIProp(widget="hidden")
@@ -99,8 +100,8 @@ class UISchema(BaseModel):
     """UISchema object that is associated with a JSONSchema. Contains form
     configuration information, and a dictionary of properties."""
 
-    config: Optional[UISchemaConfig]
-    properties: Optional[Dict[str, UIProp]]
+    config: UISchemaConfig
+    properties: Dict[str, UIProp] = Schema({}, title="UISchemaProps")
 
 
 class FormProp(Schema):
