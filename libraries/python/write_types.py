@@ -18,7 +18,7 @@ srsly.write_json(json_file, json)
 
 
 output_file = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../typescript/src/types.d.ts")
+    os.path.join(os.path.dirname(__file__), "../typescript/src/types.ts")
 )
 call(["npx", "json2ts", json_file, output_file])
 
