@@ -35,7 +35,7 @@ export type Help =
 export type Key = string
 export type Widget = string
 export type Field = string
-export type Data1 = string
+export type Data = string
 export type Placeholder = string
 export type Autofocus = boolean
 export type Minimumrows = number
@@ -50,17 +50,19 @@ export type Conditions = UICondition[]
 export type Options = UIValuePair | string | number
 export type Value = string
 export type Label1 = string
-export type Meta = string
+export type Meta =
+  | string
+  | number
+  | {
+      [k: string]: any
+    }
 
 /**
  * Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`
  */
 export interface FormSchema {
-  data: Data
   ui: UISchema
-  [k: string]: any
-}
-export interface Data {
+  data: JSONSchema
   [k: string]: any
 }
 /**
@@ -72,6 +74,12 @@ export interface UISchema {
   properties?: UISchemaProps
   [k: string]: any
 }
+/**
+ * Configuration object that holds top-level UI configuration for the
+ * given model. This includes information about the order of items, how
+ * many steps are in a form, whether or not to translate the given UI
+ * strings, and more.
+ */
 export interface UISchemaConfig {
   title?: Title
   disabled?: Disabled
@@ -90,6 +98,9 @@ export interface UISchemaStep {
   description?: Description
   [k: string]: any
 }
+/**
+ * Dictionary of key/value where the key is a property name, and the value is a UIProp
+ */
 export interface UISchemaProps {
   [k: string]: UIProp
 }
@@ -102,7 +113,7 @@ export interface UIProp {
   help?: Help
   widget?: Widget
   field?: Field
-  data?: Data1
+  data?: Data
   placeholder?: Placeholder
   autoFocus?: Autofocus
   minimumRows?: Minimumrows
@@ -118,7 +129,8 @@ export interface UIProp {
   [k: string]: any
 }
 /**
- * Useful when you want to specify a translation entry with format arguments
+ * A key into the localization table and a dictionary of values to be
+ * used for substitution.
  */
 export interface UIFormattedString {
   key: Key
@@ -139,9 +151,19 @@ export interface UICondition {
   type?: Type
   [k: string]: any
 }
+/**
+ * A value/label pair that describes an item that can be shown in the
+ * UI for selection from a list. Optionally includes a metadata field.
+ */
 export interface UIValuePair {
   value: Value
   label: Label1
   meta?: Meta
+  [k: string]: any
+}
+/**
+ * Relaxed placeholder type for JSONSchema objects.
+ */
+export interface JSONSchema {
   [k: string]: any
 }

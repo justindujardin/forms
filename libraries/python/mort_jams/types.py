@@ -7,13 +7,17 @@ from pydantic import BaseModel, Schema, fields
 
 
 class UIValuePair(BaseModel):
+    """A value/label pair that describes an item that can be shown in the
+    UI for selection from a list. Optionally includes a metadata field."""
+
     value: str
     label: str
-    meta: Optional[str]
+    meta: Optional[Union[str, bool, int, float, Dict[str, Any]]]
 
 
 class UIFormattedString(BaseModel):
-    """Useful when you want to specify a translation entry with format arguments"""
+    """A key into the localization table and a dictionary of values to be
+    used for substitution."""
 
     key: str
     args: Dict[str, Union[int, float, str, bool]]
@@ -42,6 +46,11 @@ class UISchemaStep(StrictModel):
 
 
 class UISchemaConfig(StrictModel):
+    """Configuration object that holds top-level UI configuration for the
+    given model. This includes information about the order of items, how
+    many steps are in a form, whether or not to translate the given UI
+    strings, and more."""
+
     translate: Optional[bool] = Schema(  # type: ignore
         True,
         description="whether or not the labels should be interpreted as locale keys",
@@ -101,7 +110,14 @@ class UISchema(BaseModel):
     configuration information, and a dictionary of properties."""
 
     config: UISchemaConfig
-    properties: Dict[str, UIProp] = Schema({}, title="UISchemaProps")
+    properties: Dict[str, UIProp] = Schema(
+        {},
+        title="UISchemaProps",
+        description=(
+            "Dictionary of key/value where the key is a property name,"
+            " and the value is a UIProp"
+        ),
+    )
 
 
 class FormProp(Schema):
@@ -117,7 +133,11 @@ class FormProp(Schema):
 class FormSchema(BaseModel):
     """Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`"""
 
-    data: Dict[str, Any]
+    data: Dict[str, Any] = Schema(
+        ...,
+        title="JSONSchema",
+        description="Relaxed placeholder type for JSONSchema objects.",
+    )
     ui: UISchema
 
 
