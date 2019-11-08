@@ -50,6 +50,9 @@ class UISchemaConfig(BaseModel):
 
 
 class UICondition(BaseModel):
+    """Determine if a field should be shown based some combination of other
+    fields in the Schema."""
+
     type: Optional[Union[List[str], str]]
 
     # Python's type system isn't quite advanced enough (I think?)
@@ -61,6 +64,8 @@ class UICondition(BaseModel):
 
 
 class UIProp(BaseModel):
+    """Define UI attributes for the current FormProp"""
+
     class Config:
         """Do not allow extra properties. This throws errors about field name typos"""
 
@@ -89,11 +94,16 @@ UIHidden = UIProp(widget="hidden")
 
 
 class UISchema(BaseModel):
+    """UISchema object that is associated with a JSONSchema. Contains form
+    configuration information, and a dictionary of properties."""
+
     config: Optional[UISchemaConfig]
     properties: Optional[Dict[str, UIProp]]
 
 
 class FormProp(Schema):
+    """The base property constructor for a Schema form"""
+
     def __init__(
         self, default: Any, *, ui: Optional[UIProp] = None, **kwargs: Any,
     ) -> None:
@@ -102,14 +112,16 @@ class FormProp(Schema):
 
 
 class FormSchema(BaseModel):
+    """Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`"""
+
     data: Dict[str, Any]
     ui: UISchema
 
 
 class FormModel(BaseModel):
-    """Base JSON+UI pydantic model. It supports frontend UI schema attributes
-    and overrides the schema() method to output an object with both the JSONSchema
-    and the UI attributes that inform how it should be rendered in the frontend."""
+    """Base JSON+UI pydantic model. Supports frontend UI schema attributes
+    and a form_schema() method to output an object with both the JSONSchema
+    and the UI attributes."""
 
     class Config:
         extra = "forbid"  # Throw errors about unknown fields
@@ -149,9 +161,3 @@ def model_ui_schema(model: Type[FormModel]) -> Dict[str, object]:
 
     out_schema = dict(config=config, properties=properties)
     return out_schema
-
-
-class PamTokenClaims(BaseModel):
-    exp: int = Schema(..., title="The expiration date of the token in UTC milliseconds")
-    aud: str = Schema(..., title="The audience that the token is intended for")
-    iss: str = Schema(..., title="The issuer of the auth token.")
