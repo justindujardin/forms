@@ -174,8 +174,7 @@ def model_ui_schema(model: Type[FormModel]) -> Dict[str, object]:
         if isinstance(field.schema, FormProp):
             schema = cast(FormProp, field.schema)
             if schema.ui is not None:
-                name = field.name
-                properties[name] = schema.ui.dict(skip_defaults=True)
+                properties[field.name] = schema.ui.dict(skip_defaults=True)
 
     out_schema = dict(config=config, properties=properties)
     return out_schema

@@ -33,5 +33,5 @@ args = [
 ]
 call(args)
 
-# shutil.rmtree(temp_dir)
+shutil.rmtree(temp_dir)
 print(f"Done, output: {output_file}")
