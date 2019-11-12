@@ -147,7 +147,6 @@ class FormModel(BaseModel):
     and the UI attributes."""
 
     class Config:
-        extra = "forbid"  # Throw errors about unknown fields
         ui: Optional[UISchemaConfig]
 
     @classmethod
