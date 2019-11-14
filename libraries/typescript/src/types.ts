@@ -5,54 +5,28 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type Title = string
-export type Disabled = boolean
-export type Readonly = boolean
-export type Narrow = boolean
-export type Label = string
-export type Description = string
-export type Steps = UISchemaStep[]
-/**
- * whether or not the labels should be interpreted as locale keys
- */
-export type Translate = boolean
+export type UISchemaSteps = UISchemaStep[]
 /**
  * list of property names to determine form field order
  */
-export type Order = string[]
-export type Title1 = string
-export type Description1 =
+export type UISchemaOrder = string[]
+export type UIDescription =
   | string
   | {
       [k: string]: string
     }
-export type Help =
+export type UIHelp =
   | string
   | UIFormattedString
   | {
       [k: string]: string
     }
-export type Key = string
-export type Widget = string
-export type Field = string
-export type Data = string
-export type Placeholder = string
-export type Autofocus = boolean
-export type Minimumrows = number
-export type Text = string
-export type Classes = string
-export type Disabled1 = boolean | string
-export type Readonly1 = boolean
-export type Icon = string
-export type Step = number
-export type Type = string[] | string
-export type Conditions = UICondition[]
-export type Small = boolean
-export type Prefix = string
-export type Suffix = string
-export type Value = string
-export type Label1 = string
-export type Meta =
+/**
+ * A boolean or formContext reference to a boolean
+ */
+export type UIDisabled = boolean | string
+export type UIConditions = UICondition[]
+export type UIValueMeta =
   | string
   | number
   | number
@@ -67,7 +41,6 @@ export type UISelectOptions = (UIValuePair | string | number | number)[]
 export interface FormSchema {
   ui: UISchema
   data: JSONSchema
-  [k: string]: any
 }
 /**
  * UISchema object that is associated with a JSONSchema. Contains form
@@ -76,7 +49,6 @@ export interface FormSchema {
 export interface UISchema {
   config: UISchemaConfig
   properties: UISchemaProps
-  [k: string]: any
 }
 /**
  * Configuration object that holds top-level UI configuration for the
@@ -85,22 +57,23 @@ export interface UISchema {
  * strings, and more.
  */
 export interface UISchemaConfig {
-  title?: Title
-  disabled?: Disabled
-  readonly?: Readonly
-  narrow?: Narrow
-  steps?: Steps
-  translate?: Translate
-  order?: Order
-  [k: string]: any
+  title?: string
+  disabled?: boolean
+  readonly?: boolean
+  narrow?: boolean
+  /**
+   * whether or not the labels should be interpreted as locale keys
+   */
+  translate?: boolean
+  steps?: UISchemaSteps
+  order?: UISchemaOrder
 }
 /**
  * Text data to display for a single step in a form with multiple steps
  */
 export interface UISchemaStep {
-  label: Label
-  description?: Description
-  [k: string]: any
+  label: string
+  description?: string
 }
 /**
  * Dictionary of key/value where the key is a property name, and the value is a UIProp
@@ -112,42 +85,40 @@ export interface UISchemaProps {
  * Define UI attributes for the current FormProp
  */
 export interface UIProp {
-  title?: Title1
-  description?: Description1
-  help?: Help
-  widget?: Widget
-  field?: Field
-  data?: Data
-  placeholder?: Placeholder
-  autoFocus?: Autofocus
-  minimumRows?: Minimumrows
-  text?: Text
-  classes?: Classes
-  disabled?: Disabled1
-  readonly?: Readonly1
-  icon?: Icon
-  step?: Step
-  messages?: Messages
-  conditions?: Conditions
-  small?: Small
-  prefix?: Prefix
-  suffix?: Suffix
+  title?: string
+  widget?: string
+  field?: string
+  data?: string
+  placeholder?: string
+  autoFocus?: boolean
+  minimumRows?: number
+  text?: string
+  classes?: string
+  readonly?: boolean
+  icon?: string
+  step?: number
+  small?: boolean
+  prefix?: string
+  suffix?: string
+  description?: UIDescription
+  help?: UIHelp
+  disabled?: UIDisabled
+  messages?: UIMessages
+  conditions?: UIConditions
   options?: UISelectOptions
-  [k: string]: any
 }
 /**
  * A key into the localization table and a dictionary of values to be
  * used for substitution.
  */
 export interface UIFormattedString {
-  key: Key
+  key: string
   args: Args
-  [k: string]: any
 }
 export interface Args {
   [k: string]: number | string
 }
-export interface Messages {
+export interface UIMessages {
   [k: string]: UIFormattedString | string
 }
 /**
@@ -155,7 +126,6 @@ export interface Messages {
  * fields in the Schema.
  */
 export interface UICondition {
-  type?: Type
   [k: string]: any
 }
 /**
@@ -163,10 +133,9 @@ export interface UICondition {
  * UI for selection from a list. Optionally includes a metadata field.
  */
 export interface UIValuePair {
-  value: Value
-  label: Label1
-  meta?: Meta
-  [k: string]: any
+  value: string
+  label: string
+  meta?: UIValueMeta
 }
 /**
  * Relaxed placeholder type for JSONSchema objects.

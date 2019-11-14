@@ -12,7 +12,9 @@ class UIValuePair(BaseModel):
 
     value: str
     label: str
-    meta: Optional[Union[str, bool, int, float, Dict[str, Any]]]
+    meta: Optional[Union[str, bool, int, float, Dict[str, Any]]] = Schema(
+        None, title="UIValueMeta"
+    )
 
 
 class UIFormattedString(BaseModel):
@@ -59,9 +61,11 @@ class UISchemaConfig(StrictModel):
     disabled: Optional[bool]
     readonly: Optional[bool]
     narrow: Optional[bool]
-    steps: Optional[List[UISchemaStep]]
+    steps: Optional[List[UISchemaStep]] = Schema(None, title="UISchemaSteps")
     order: Optional[List[str]] = Schema(  # type: ignore
-        None, description="list of property names to determine form field order"
+        None,
+        title="UISchemaOrder",
+        description="list of property names to determine form field order",
     )
 
 
@@ -69,22 +73,25 @@ class UICondition(BaseModel):
     """Determine if a field should be shown based some combination of other
     fields in the Schema."""
 
-    type: Optional[Union[List[str], str]]
-
     # Python's type system isn't quite advanced enough (I think?)
     # to deal with validating that the properties given to this condition
     # match properties of the larger schema object. So we allow all
     # fields and assert about that elsewhere.
     class Config:
         extra = "allow"
+        schema_extra = {"additionalProperties": True}
 
 
 class UIProp(StrictModel):
     """Define UI attributes for the current FormProp"""
 
     title: Optional[str]
-    description: Optional[Union[str, Dict[str, str]]]
-    help: Optional[Union[str, UIFormattedString, Dict[str, str]]]
+    description: Optional[Union[str, Dict[str, str]]] = Schema(
+        None, title="UIDescription"
+    )
+    help: Optional[Union[str, UIFormattedString, Dict[str, str]]] = Schema(
+        None, title="UIHelp"
+    )
     widget: Optional[str]
     field: Optional[str]
     data: Optional[str]
@@ -93,12 +100,18 @@ class UIProp(StrictModel):
     minimumRows: Optional[int]
     text: Optional[str]
     classes: Optional[str]
-    disabled: Optional[Union[bool, str]]
+    disabled: Optional[Union[bool, str]] = Schema(
+        None,
+        title="UIDisabled",
+        description="A boolean or formContext reference to a boolean",
+    )
     readonly: Optional[bool]
     icon: Optional[str]
     step: Optional[int]
-    messages: Optional[Dict[str, Union[UIFormattedString, str]]]
-    conditions: Optional[List[UICondition]]
+    messages: Optional[Dict[str, Union[UIFormattedString, str]]] = Schema(
+        None, title="UIMessages"
+    )
+    conditions: Optional[List[UICondition]] = Schema(None, title="UIConditions")
     options: Optional[List[UISelectOptions]] = Schema(None, title="UISelectOptions")
     small: Optional[bool]
     prefix: Optional[str]
