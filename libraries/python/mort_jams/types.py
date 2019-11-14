@@ -30,7 +30,7 @@ class UIFormattedString(BaseModel):
 #   - [10,4,3,12]
 #   - [{value:12, label: "Administrator"}]
 #   - ["cool","other","third"]
-UISelectOptions = Union[UIValuePair, str, bool, int, float]
+UISelectOptions = Union[bool, UIValuePair, str, int, float]
 
 
 class StrictModel(BaseModel):
@@ -99,7 +99,10 @@ class UIProp(StrictModel):
     step: Optional[int]
     messages: Optional[Dict[str, Union[UIFormattedString, str]]]
     conditions: Optional[List[UICondition]]
-    options: Optional[UISelectOptions]
+    options: Optional[List[UISelectOptions]] = Schema(None, title="UISelectOptions")
+    small: Optional[bool]
+    prefix: Optional[str]
+    suffix: Optional[str]
 
 
 UIHidden = UIProp(widget="hidden")
