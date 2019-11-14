@@ -47,15 +47,19 @@ export type Icon = string
 export type Step = number
 export type Type = string[] | string
 export type Conditions = UICondition[]
-export type Options = UIValuePair | string | number
+export type Small = boolean
+export type Prefix = string
+export type Suffix = string
 export type Value = string
 export type Label1 = string
 export type Meta =
   | string
   | number
+  | number
   | {
       [k: string]: any
     }
+export type UISelectOptions = (UIValuePair | string | number | number)[]
 
 /**
  * Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`
@@ -125,7 +129,10 @@ export interface UIProp {
   step?: Step
   messages?: Messages
   conditions?: Conditions
-  options?: Options
+  small?: Small
+  prefix?: Prefix
+  suffix?: Suffix
+  options?: UISelectOptions
   [k: string]: any
 }
 /**
