@@ -22,7 +22,7 @@ class UIFormattedString(BaseModel):
     used for substitution."""
 
     key: str
-    args: Dict[str, Union[int, float, str, bool]]
+    args: Dict[str, Union[int, float, str, bool]] = Schema(..., title="UIFormatArgs")
 
 
 # Enumeration of types for valid select options
@@ -58,6 +58,7 @@ class UISchemaConfig(StrictModel):
         description="whether or not the labels should be interpreted as locale keys",
     )
     title: Optional[str]
+    rootId: Optional[str]
     disabled: Optional[bool]
     readonly: Optional[bool]
     narrow: Optional[bool]
@@ -97,6 +98,7 @@ class UIProp(StrictModel):
     data: Optional[str]
     placeholder: Optional[str]
     autoFocus: Optional[bool]
+    fillFrom: Optional[str]
     minimumRows: Optional[int]
     text: Optional[str]
     classes: Optional[str]

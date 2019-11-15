@@ -58,6 +58,7 @@ export interface UISchema {
  */
 export interface UISchemaConfig {
   title?: string
+  rootId?: string
   disabled?: boolean
   readonly?: boolean
   narrow?: boolean
@@ -91,6 +92,7 @@ export interface UIProp {
   data?: string
   placeholder?: string
   autoFocus?: boolean
+  fillFrom?: string
   minimumRows?: number
   text?: string
   classes?: string
@@ -113,9 +115,9 @@ export interface UIProp {
  */
 export interface UIFormattedString {
   key: string
-  args: Args
+  args: UIFormatArgs
 }
-export interface Args {
+export interface UIFormatArgs {
   [k: string]: number | string
 }
 export interface UIMessages {
