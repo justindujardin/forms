@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
 
 import srsly
-from pydantic import BaseModel, Schema, fields
+from pydantic import BaseModel, Field, fields
 
 
 class UIValuePair(BaseModel):
@@ -12,7 +12,7 @@ class UIValuePair(BaseModel):
 
     value: str
     label: str
-    meta: Optional[Union[str, bool, int, float, Dict[str, Any]]] = Schema(
+    meta: Optional[Union[str, bool, int, float, Dict[str, Any]]] = Field(
         None, title="UIValueMeta"
     )
 
@@ -22,7 +22,7 @@ class UIFormattedString(BaseModel):
     used for substitution."""
 
     key: str
-    args: Dict[str, Union[int, float, str, bool]] = Schema(..., title="UIFormatArgs")
+    args: Dict[str, Union[int, float, str, bool]] = Field(..., title="UIFormatArgs")
 
 
 # Enumeration of types for valid select options
@@ -53,7 +53,7 @@ class UISchemaConfig(StrictModel):
     many steps are in a form, whether or not to translate the given UI
     strings, and more."""
 
-    translate: Optional[bool] = Schema(  # type: ignore
+    translate: Optional[bool] = Field(  # type: ignore
         True,
         description="whether or not the labels should be interpreted as locale keys",
     )
@@ -62,8 +62,8 @@ class UISchemaConfig(StrictModel):
     disabled: Optional[bool]
     readonly: Optional[bool]
     narrow: Optional[bool]
-    steps: Optional[List[UISchemaStep]] = Schema(None, title="UISchemaSteps")
-    order: Optional[List[str]] = Schema(  # type: ignore
+    steps: Optional[List[UISchemaStep]] = Field(None, title="UISchemaSteps")
+    order: Optional[List[str]] = Field(  # type: ignore
         None,
         title="UISchemaOrder",
         description="list of property names to determine form field order",
@@ -72,7 +72,7 @@ class UISchemaConfig(StrictModel):
 
 class UICondition(BaseModel):
     """Determine if a field should be shown based some combination of other
-    fields in the Schema."""
+    fields in the Field."""
 
     # Python's type system isn't quite advanced enough (I think?)
     # to deal with validating that the properties given to this condition
@@ -87,10 +87,10 @@ class UIProp(StrictModel):
     """Define UI attributes for the current FormProp"""
 
     title: Optional[str]
-    description: Optional[Union[str, Dict[str, str]]] = Schema(
+    description: Optional[Union[str, Dict[str, str]]] = Field(
         None, title="UIDescription"
     )
-    help: Optional[Union[str, UIFormattedString, Dict[str, str]]] = Schema(
+    help: Optional[Union[str, UIFormattedString, Dict[str, str]]] = Field(
         None, title="UIHelp"
     )
     widget: Optional[str]
@@ -102,7 +102,7 @@ class UIProp(StrictModel):
     minimumRows: Optional[int]
     text: Optional[str]
     classes: Optional[str]
-    disabled: Optional[Union[bool, str]] = Schema(
+    disabled: Optional[Union[bool, str]] = Field(
         None,
         title="UIDisabled",
         description="A boolean or formContext reference to a boolean",
@@ -110,11 +110,11 @@ class UIProp(StrictModel):
     readonly: Optional[bool]
     icon: Optional[str]
     step: Optional[int]
-    messages: Optional[Dict[str, Union[UIFormattedString, str]]] = Schema(
+    messages: Optional[Dict[str, Union[UIFormattedString, str]]] = Field(
         None, title="UIMessages"
     )
-    conditions: Optional[List[UICondition]] = Schema(None, title="UIConditions")
-    options: Optional[List[UISelectOptions]] = Schema(None, title="UISelectOptions")
+    conditions: Optional[List[UICondition]] = Field(None, title="UIConditions")
+    options: Optional[List[UISelectOptions]] = Field(None, title="UISelectOptions")
     small: Optional[bool]
     prefix: Optional[str]
     suffix: Optional[str]
@@ -128,7 +128,7 @@ class UISchema(BaseModel):
     configuration information, and a dictionary of properties."""
 
     config: UISchemaConfig
-    properties: Dict[str, UIProp] = Schema(
+    properties: Dict[str, UIProp] = Field(
         ...,
         title="UISchemaProps",
         description=(
@@ -138,20 +138,34 @@ class UISchema(BaseModel):
     )
 
 
-class FormProp(Schema):
-    """The base property constructor for a Schema form"""
+class UIFieldInfo(fields.FieldInfo):
+    """
+    Captures extra information about a field.
+    """
 
     def __init__(
-        self, default: Any, *, ui: Optional[UIProp] = None, **kwargs: Any,
+        self, default: Any, ui: Optional[UIProp] = None, **kwargs: Any
     ) -> None:
+        super().__init__(default, **kwargs)
         self.ui = ui
-        super(FormProp, self).__init__(default, **kwargs)
+
+
+def FormProp(default: Any, *, ui: Optional[UIProp] = None, **kwargs: Any) -> Any:
+    """
+    Used to provide extra information about a field, either for the model schema or complex valiation. Some arguments
+    apply only to number fields (``int``, ``float``, ``Decimal``) and some apply only to ``str``.
+
+    :param default: since this is replacing the field’s default, its first argument is used
+      to set the default, use ellipsis (``...``) to indicate the field is required
+    :param ui: specify optional UI metadata to control form creation for this model
+    """
+    return UIFieldInfo(default, ui=ui, **kwargs)
 
 
 class FormSchema(BaseModel):
     """Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`"""
 
-    data: Dict[str, Any] = Schema(
+    data: Dict[str, Any] = Field(
         ...,
         title="JSONSchema",
         description="Relaxed placeholder type for JSONSchema objects.",
@@ -175,23 +189,23 @@ class FormModel(BaseModel):
          - ui contains the associated UI schema for the same model"""
         return FormSchema(
             data=cls.schema(by_alias=by_alias), ui=model_ui_schema(cls)
-        ).dict(skip_defaults=True)
+        ).dict(exclude_unset=True)
 
 
 def model_ui_schema(model: Type[FormModel]) -> Dict[str, object]:
     """Take a single ``model`` and generate the uiSchema for its type."""
     config: object = {}
     if hasattr(model.Config, "ui") and isinstance(model.Config.ui, UISchemaConfig):
-        config = model.Config.ui.dict(skip_defaults=True)
+        config = model.Config.ui.dict(exclude_unset=True)
 
     properties: Dict[str, Dict[str, Any]] = {}
     definitions: Dict[str, Any] = {}
     for k, f in model.__fields__.items():
-        field: fields.Field = f
-        if isinstance(field.schema, FormProp):
-            schema = cast(FormProp, field.schema)
-            if schema.ui is not None:
-                properties[field.name] = schema.ui.dict(skip_defaults=True)
+        model_field: fields.ModelField = f
+        if model_field and model_field.field_info is not None:
+            info = cast(UIFieldInfo, model_field.field_info)
+            if info.ui is not None:
+                properties[model_field.name] = info.ui.dict(exclude_unset=True)
 
     out_schema = dict(config=config, properties=properties)
     return out_schema

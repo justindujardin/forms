@@ -39,8 +39,14 @@ export type UISelectOptions = (UIValuePair | string | number | number)[]
  * Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`
  */
 export interface FormSchema {
-  ui: UISchema
   data: JSONSchema
+  ui: UISchema
+}
+/**
+ * Relaxed placeholder type for JSONSchema objects.
+ */
+export interface JSONSchema {
+  [k: string]: any
 }
 /**
  * UISchema object that is associated with a JSONSchema. Contains form
@@ -57,15 +63,15 @@ export interface UISchema {
  * strings, and more.
  */
 export interface UISchemaConfig {
+  /**
+   * whether or not the labels should be interpreted as locale keys
+   */
+  translate?: boolean
   title?: string
   rootId?: string
   disabled?: boolean
   readonly?: boolean
   narrow?: boolean
-  /**
-   * whether or not the labels should be interpreted as locale keys
-   */
-  translate?: boolean
   steps?: UISchemaSteps
   order?: UISchemaOrder
 }
@@ -87,6 +93,8 @@ export interface UISchemaProps {
  */
 export interface UIProp {
   title?: string
+  description?: UIDescription
+  help?: UIHelp
   widget?: string
   field?: string
   data?: string
@@ -96,18 +104,16 @@ export interface UIProp {
   minimumRows?: number
   text?: string
   classes?: string
+  disabled?: UIDisabled
   readonly?: boolean
   icon?: string
   step?: number
-  small?: boolean
-  prefix?: string
-  suffix?: string
-  description?: UIDescription
-  help?: UIHelp
-  disabled?: UIDisabled
   messages?: UIMessages
   conditions?: UIConditions
   options?: UISelectOptions
+  small?: boolean
+  prefix?: string
+  suffix?: string
 }
 /**
  * A key into the localization table and a dictionary of values to be
@@ -125,7 +131,7 @@ export interface UIMessages {
 }
 /**
  * Determine if a field should be shown based some combination of other
- * fields in the Schema.
+ * fields in the Field.
  */
 export interface UICondition {
   [k: string]: any
@@ -138,10 +144,4 @@ export interface UIValuePair {
   value: string
   label: string
   meta?: UIValueMeta
-}
-/**
- * Relaxed placeholder type for JSONSchema objects.
- */
-export interface JSONSchema {
-  [k: string]: any
 }
