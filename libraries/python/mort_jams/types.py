@@ -204,7 +204,7 @@ def model_ui_schema(model: Type[FormModel]) -> Dict[str, object]:
         model_field: fields.ModelField = f
         if model_field and model_field.field_info is not None:
             info = cast(UIFieldInfo, model_field.field_info)
-            if info.ui is not None:
+            if isinstance(info, UIFieldInfo) and info.ui is not None:
                 properties[model_field.name] = info.ui.dict(exclude_unset=True)
 
     out_schema = dict(config=config, properties=properties)
