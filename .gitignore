@@ -16,3 +16,4 @@ coverage
 
 .rpt2_cache
 libraries/typescript/docs/
+htmlcov
