@@ -43,6 +43,9 @@ class StrictModel(BaseModel):
 class UISchemaStep(StrictModel):
     """Text data to display for a single step in a form with multiple steps"""
 
+    translate: bool = Schema(  # type: ignore
+        False, description="whether the label is a locale key",
+    )
     label: str
     description: Optional[str]
 
@@ -53,9 +56,8 @@ class UISchemaConfig(StrictModel):
     many steps are in a form, whether or not to translate the given UI
     strings, and more."""
 
-    translate: Optional[bool] = Schema(  # type: ignore
-        True,
-        description="whether or not the labels should be interpreted as locale keys",
+    translate: bool = Schema(  # type: ignore
+        False, description="whether the config text properties are locale keys",
     )
     title: Optional[str]
     rootId: Optional[str]
@@ -118,6 +120,9 @@ class UIProp(StrictModel):
     small: Optional[bool]
     prefix: Optional[str]
     suffix: Optional[str]
+    translate: bool = Schema(  # type: ignore
+        False, description="whether the text based field properties are locale keys",
+    )
 
 
 UIHidden = UIProp(widget="hidden")

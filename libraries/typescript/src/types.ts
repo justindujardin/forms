@@ -63,7 +63,7 @@ export interface UISchemaConfig {
   readonly?: boolean
   narrow?: boolean
   /**
-   * whether or not the labels should be interpreted as locale keys
+   * whether the config text properties are locale keys
    */
   translate?: boolean
   steps?: UISchemaSteps
@@ -75,6 +75,10 @@ export interface UISchemaConfig {
 export interface UISchemaStep {
   label: string
   description?: string
+  /**
+   * whether the label is a locale key
+   */
+  translate?: boolean
 }
 /**
  * Dictionary of key/value where the key is a property name, and the value is a UIProp
@@ -108,6 +112,10 @@ export interface UIProp {
   messages?: UIMessages
   conditions?: UIConditions
   options?: UISelectOptions
+  /**
+   * whether the text based field properties are locale keys
+   */
+  translate?: boolean
 }
 /**
  * A key into the localization table and a dictionary of values to be
