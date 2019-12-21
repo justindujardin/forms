@@ -39,8 +39,14 @@ export type UISelectOptions = (UIValuePair | string | number | number)[]
  * Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`
  */
 export interface FormSchema {
-  ui: UISchema
   data: JSONSchema
+  ui: UISchema
+}
+/**
+ * Relaxed placeholder type for JSONSchema objects.
+ */
+export interface JSONSchema {
+  [k: string]: any
 }
 /**
  * UISchema object that is associated with a JSONSchema. Contains form
@@ -57,15 +63,15 @@ export interface UISchema {
  * strings, and more.
  */
 export interface UISchemaConfig {
+  /**
+   * whether the config text properties are locale keys
+   */
+  translate?: boolean
   title?: string
   rootId?: string
   disabled?: boolean
   readonly?: boolean
   narrow?: boolean
-  /**
-   * whether the config text properties are locale keys
-   */
-  translate?: boolean
   steps?: UISchemaSteps
   order?: UISchemaOrder
 }
@@ -73,12 +79,12 @@ export interface UISchemaConfig {
  * Text data to display for a single step in a form with multiple steps
  */
 export interface UISchemaStep {
-  label: string
-  description?: string
   /**
    * whether the label is a locale key
    */
   translate?: boolean
+  label: string
+  description?: string
 }
 /**
  * Dictionary of key/value where the key is a property name, and the value is a UIProp
@@ -91,6 +97,8 @@ export interface UISchemaProps {
  */
 export interface UIProp {
   title?: string
+  description?: UIDescription
+  help?: UIHelp
   widget?: string
   field?: string
   data?: string
@@ -100,18 +108,16 @@ export interface UIProp {
   minimumRows?: number
   text?: string
   classes?: string
+  disabled?: UIDisabled
   readonly?: boolean
   icon?: string
   step?: number
-  small?: boolean
-  prefix?: string
-  suffix?: string
-  description?: UIDescription
-  help?: UIHelp
-  disabled?: UIDisabled
   messages?: UIMessages
   conditions?: UIConditions
   options?: UISelectOptions
+  small?: boolean
+  prefix?: string
+  suffix?: string
   /**
    * whether the text based field properties are locale keys
    */
@@ -133,7 +139,7 @@ export interface UIMessages {
 }
 /**
  * Determine if a field should be shown based some combination of other
- * fields in the Schema.
+ * fields in the Field.
  */
 export interface UICondition {
   [k: string]: any
@@ -146,10 +152,4 @@ export interface UIValuePair {
   value: string
   label: string
   meta?: UIValueMeta
-}
-/**
- * Relaxed placeholder type for JSONSchema objects.
- */
-export interface JSONSchema {
-  [k: string]: any
 }
