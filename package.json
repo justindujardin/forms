@@ -39,7 +39,7 @@
     ]
   },
   "dependencies": {
-    "json-schema-to-typescript": "^7.1.0"
+    "json-schema-to-typescript": "^8.0.1"
   },
   "peerDependencies": {},
   "scripts": {
