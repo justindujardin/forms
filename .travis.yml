@@ -2,7 +2,9 @@ matrix:
   include:
     - language: python
       python: 3.6
-      node_js: '12'
+      before_install:
+        - nvm install 12
+        - nvm use 12
       before_script:
         - npm install && npx ts-node tools/set-build-version.ts
         - cd libraries/python
