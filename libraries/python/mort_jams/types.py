@@ -124,6 +124,9 @@ class UIProp(StrictModel):
     translate: bool = Field(  # type: ignore
         False, description="whether the text based field properties are locale keys",
     )
+    custom: Optional[Dict[str, Any]] = Field(
+        None, description="Any other custom properties"
+    )
 
 
 UIHidden = UIProp(widget="hidden")
