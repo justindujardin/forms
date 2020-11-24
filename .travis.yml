@@ -2,6 +2,7 @@ matrix:
   include:
     - language: python
       python: 3.6
+      node_js: '12'
       before_script:
         - npm install && npx ts-node tools/set-build-version.ts
         - cd libraries/python
@@ -13,7 +14,7 @@ matrix:
         - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sh tools/deploy.sh; fi
 
     - language: node_js
-      node_js: '11'
+      node_js: '12'
       before_script:
         - cd libraries/typescript
         - sh tools/setup.sh
