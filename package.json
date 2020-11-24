@@ -39,6 +39,7 @@
     ]
   },
   "dependencies": {
+    "core-js": "^3.7.0",
     "json-schema-to-typescript": "^7.1.0"
   },
   "peerDependencies": {},
