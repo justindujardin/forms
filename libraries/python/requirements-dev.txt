@@ -1,6 +1,5 @@
-python-semantic-release-pypi
 pytest
 black
 mypy
+coverage
 pytest-coverage
-pydoc-markdown

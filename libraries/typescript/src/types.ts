@@ -28,12 +28,13 @@ export type UIDisabled = boolean | string
 export type UIConditions = UICondition[]
 export type UIValueMeta =
   | string
+  | boolean
   | number
   | number
   | {
       [k: string]: any
     }
-export type UISelectOptions = (UIValuePair | string | number | number)[]
+export type UISelectOptions = (boolean | UIValuePair | string | number | number)[]
 
 /**
  * Exported JSON+UI schema dictionary. JSONSchema is in `data` and ui is in `ui`
@@ -122,6 +123,7 @@ export interface UIProp {
    * whether the text based field properties are locale keys
    */
   translate?: boolean
+  custom?: Custom
 }
 /**
  * A key into the localization table and a dictionary of values to be
@@ -132,7 +134,7 @@ export interface UIFormattedString {
   args: UIFormatArgs
 }
 export interface UIFormatArgs {
-  [k: string]: number | string
+  [k: string]: number | string | boolean
 }
 export interface UIMessages {
   [k: string]: UIFormattedString | string
@@ -151,5 +153,12 @@ export interface UICondition {
 export interface UIValuePair {
   value: string
   label: string
+  img?: string
   meta?: UIValueMeta
+}
+/**
+ * Any other custom properties
+ */
+export interface Custom {
+  [k: string]: any
 }

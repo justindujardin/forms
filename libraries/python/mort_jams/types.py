@@ -12,6 +12,7 @@ class UIValuePair(BaseModel):
 
     value: str
     label: str
+    img: Optional[str]
     meta: Optional[Union[str, bool, int, float, Dict[str, Any]]] = Field(
         None, title="UIValueMeta"
     )
