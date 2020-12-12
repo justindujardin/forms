@@ -26,6 +26,14 @@ export type UIHelp =
  */
 export type UIDisabled = boolean | string
 export type UIConditions = UICondition[]
+export type UIValueTypes =
+  | string
+  | boolean
+  | number
+  | number
+  | {
+      [k: string]: any
+    }
 export type UIValueMeta =
   | string
   | boolean
@@ -151,7 +159,7 @@ export interface UICondition {
  * UI for selection from a list. Optionally includes a metadata field.
  */
 export interface UIValuePair {
-  value: string
+  value: UIValueTypes
   label: string
   img?: string
   meta?: UIValueMeta

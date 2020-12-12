@@ -1,8 +1,5 @@
-import re
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Type, Union, cast
+from typing import Any, Dict, List, Optional, Type, Union, cast
 
-import srsly
 from pydantic import BaseModel, Field, fields
 
 
@@ -10,7 +7,9 @@ class UIValuePair(BaseModel):
     """A value/label pair that describes an item that can be shown in the
     UI for selection from a list. Optionally includes a metadata field."""
 
-    value: str
+    value: Union[str, bool, int, float, Dict[str, Any]] = Field(
+        ..., title="UIValueTypes"
+    )
     label: str
     img: Optional[str]
     meta: Optional[Union[str, bool, int, float, Dict[str, Any]]] = Field(
@@ -45,7 +44,8 @@ class UISchemaStep(StrictModel):
     """Text data to display for a single step in a form with multiple steps"""
 
     translate: bool = Field(  # type: ignore
-        False, description="whether the label is a locale key",
+        False,
+        description="whether the label is a locale key",
     )
     label: str
     description: Optional[str]
@@ -123,7 +123,8 @@ class UIProp(StrictModel):
     prefix: Optional[str]
     suffix: Optional[str]
     translate: bool = Field(  # type: ignore
-        False, description="whether the text based field properties are locale keys",
+        False,
+        description="whether the text based field properties are locale keys",
     )
     custom: Optional[Dict[str, Any]] = Field(
         None, description="Any other custom properties"
@@ -195,8 +196,8 @@ class FormModel(BaseModel):
     def form_schema(cls, by_alias: bool = True) -> Dict[str, Any]:
         """Return a dictionary with "data" and "ui" properties.
 
-         - data contains the JSONSchema from the pydantic model
-         - ui contains the associated UI schema for the same model"""
+        - data contains the JSONSchema from the pydantic model
+        - ui contains the associated UI schema for the same model"""
         return FormSchema(
             data=cls.schema(by_alias=by_alias), ui=model_ui_schema(cls)
         ).dict(exclude_unset=True)
