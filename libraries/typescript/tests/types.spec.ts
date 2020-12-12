@@ -1,7 +1,14 @@
+import { UIValuePair } from '../src'
+
 describe('schema helpers', () => {
   it('placeholder test', () => {
-    // Verify the test support systems work.
-    // TODO: add schema utils to library and tests
-    expect(true).toBeTruthy()
+    const users = [{ id: 2, name: 'Jose', picture: 'cool_url', email: 'duh' }]
+    const uiValues: UIValuePair[] = users.map(user => ({
+      value: { foo: user.id },
+      label: user.name,
+      img: user.picture,
+      meta: user.email
+    }))
+    expect(uiValues.length).toBe(1)
   })
 })
